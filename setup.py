@@ -13,20 +13,20 @@ def read_file(filename):
 
 
 setup(
-    name='django-healthvaultapp',
+    name='django-healthvault',
     version=__import__('healthvaultapp').__version__,
     author='Caktus Consulting Group',
     author_email='solutions@caktusgroup.com',
     packages=find_packages(),
     include_package_data=True,
-    url='https://github.com/caktus/django-healthvaultapp/',
+    url='https://github.com/caktus/django-healthvault/',
     license='BSD',
     description=u' '.join(__import__('healthvaultapp').__doc__.splitlines()).strip(),
     classifiers=[
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
-        'Programming Language :: Python',      
+        'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Framework :: Django',
