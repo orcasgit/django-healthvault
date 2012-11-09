@@ -61,6 +61,8 @@ def error(request, extra_context=None):
             </body>
         </html>
 
+    You may optionally provide extra context when rendering this view.
+
     URL name:
         `healthvault-error`
     """

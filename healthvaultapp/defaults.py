@@ -3,9 +3,7 @@
 #   HEALTHVAULT_THUMBPRINT
 #   HEALTHVAULT_PUBLIC_KEY
 #   HEALTHVAULT_PRIVATE_KEY
-
-# This is the pre-production server for the US.
-HEALTHVAULT_SHELL_SERVER = 'account.healthvault-ppe.com'
+#   HEALTHVAULT_SHELL_SERVER
 
 # Where to redirect to after HealthVault authentication is successfully
 # completed.

@@ -11,7 +11,19 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+    starting
+    settings
+    views
+    templatetags
+    utils
+    releases
+    links
 
+django-healthvault is a Django app for integrating a user's HealthVault data
+into your site.
+
+It handles the details of getting your app authorized to access your user's
+HealthVault data via the HealthVault web API.
 
 Indices and tables
 ==================
