@@ -1,5 +1,11 @@
-HEALTHVAULT_PUBLIC_KEY = None
-HEALTHVAULT_PRIVATE_KEY = None
+# Your project must provide the following HealthVault app access credentials:
+#   HEALTHVAULT_APP_ID
+#   HEALTHVAULT_THUMBPRINT
+#   HEALTHVAULT_PUBLIC_KEY
+#   HEALTHVAULT_PRIVATE_KEY
+
+# This is the pre-production server for the US.
+HEALTHVAULT_SHELL_SERVER = 'account.healthvault-ppe.com'
 
 # Where to redirect to after HealthVault authentication is successfully
 # completed.
