@@ -1,0 +1,6 @@
+include AUTHORS
+include LICENSE
+include README.rst
+recursive-include healthvaultapp/static *
+recursive-include healthvaultapp/templates *
+recursive-include requirements *
