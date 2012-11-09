@@ -1,3 +1,2 @@
-"<Include a description of your project>"
-
-__version__ = '0.0.0'
+"Django integration for python-healthvault"
+__version__ = '0.0.1'

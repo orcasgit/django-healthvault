@@ -1,27 +1,20 @@
-import os
 from setuptools import setup, find_packages
 
 
-def read_file(filename):
-    """Read a file into a string"""
-    path = os.path.abspath(os.path.dirname(__file__))
-    filepath = os.path.join(path, filename)
-    try:
-        return open(filepath).read()
-    except IOError:
-        return ''
-
+required = [line for line in open('requirements/base.txt').read().split('\n')]
 
 setup(
     name='django-healthvault',
     version=__import__('healthvaultapp').__version__,
-    author='Caktus Consulting Group',
-    author_email='solutions@caktusgroup.com',
+    author='orcas',
+    author_email='',
     packages=find_packages(),
     include_package_data=True,
+    install_requires=['distribute'] + required,
     url='https://github.com/caktus/django-healthvault/',
-    license='BSD',
+    license='',
     description=u' '.join(__import__('healthvaultapp').__doc__.splitlines()).strip(),
+    long_description=open('README.rst').read(),
     classifiers=[
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Intended Audience :: Developers',
@@ -33,7 +26,6 @@ setup(
         'Development Status :: 4 - Beta',
         'Operating System :: OS Independent',
     ],
-    long_description=read_file('README.rst'),
     test_suite="runtests.runtests",
     zip_safe=False,
 )
