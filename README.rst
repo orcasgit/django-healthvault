@@ -3,8 +3,9 @@
 healthvaultapp
 ===================================
 
-Welcome to the documentation for django-healthvault!
-
+django-healthvault is a Django app which integrates data stored on HealthVault
+into your site. It handles the details of getting your site authorized to
+access a user's HealthVault data via the HealthVault web API.
 
 Documentation
 -----------------------------------
