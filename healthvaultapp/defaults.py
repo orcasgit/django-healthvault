@@ -5,13 +5,11 @@
 #   HEALTHVAULT_PRIVATE_KEY
 #   HEALTHVAULT_SHELL_SERVER
 
-# Where to redirect to after HealthVault authentication is successfully
-# completed.
-HEALTHVAULT_LOGIN_REDIRECT = '/'
+# Where to redirect to after successful completion of HealthVault integration.
+HEALTHVAULT_AUTHORIZE_REDIRECT = '/'
 
-# Where to redirect to after HealthVault authentication credentials have been
-# removed.
-HEALTHVAULT_LOGOUT_REDIRECT = '/'
+# Where to redirect to after removal of HealthVault credentials.
+HEALTHVAULT_DEAUTHORIZE_REDIRECT = '/'
 
 # The template to use when an unavoidable error occurs during HealthVault
 # integration.

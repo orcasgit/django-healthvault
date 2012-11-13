@@ -36,9 +36,9 @@ HEALTHVAULT_SHELL_SERVER
 
 You  must specify a non-null value for this setting.
 
-.. _HEALTHVAULT_LOGIN_REDIRECT:
+.. _HEALTHVAULT_AUTHORIZE_REDIRECT:
 
-HEALTHVAULT_LOGIN_REDIRECT
+HEALTHVAULT_AUTHORIZE_REDIRECT
 --------------------------
 
 :Default: ``'/'``
@@ -47,9 +47,9 @@ The URL which to redirect the user to after successful HealthVault
 integration, if no forwarding URL is given in the 'healthvault_next' session
 variable.
 
-.. _HEALTHVAULT_LOGOUT_REDIRECT:
+.. _HEALTHVAULT_DEAUTHORIZE_REDIRECT:
 
-HEATHVAULT_LOGOUT_REDIRECT
+HEATHVAULT_DEAUTHORIZE_REDIRECT
 --------------------------
 
 :Default: ``'/'``

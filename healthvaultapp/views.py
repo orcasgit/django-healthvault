@@ -9,7 +9,7 @@ from .models import HealthVaultUser
 
 
 @login_required
-def login(request):
+def authorize(request):
     next_url = request.GET.get('next', None)
     if next_url:
         request.session['healthvault_next'] = next_url
@@ -36,7 +36,7 @@ def complete(request):
     hvuser.save()
     next_url = request.session.pop('healthvault_next', None)
     if not next_url:
-        next_url = utils.get_setting('HEALTHVAULT_LOGIN_REDIRECT')
+        next_url = utils.get_setting('HEALTHVAULT_AUTHORIZE_REDIRECT')
     return redirect(next_url)
 
 
@@ -71,5 +71,9 @@ def error(request, extra_context=None):
 
 
 @login_required
-def logout(request):
-    pass
+def deauthorize(request):
+    # TODO: is there a way to self-deauthorize from healthvault?
+    HealthVaultUser.objects.filter(user=request.user).delete()
+    next_url = request.GET.get('next', None) or utils.get_setting(
+            'HEALTHVAULT_DEAUTHORIZE_REDIRECT')
+    return redirect(next_url)
