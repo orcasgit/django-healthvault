@@ -10,26 +10,33 @@ from .models import HealthVaultUser
 
 @login_required
 def authorize(request):
+    # Store the redirect URL in the session for after authorization completion
     next_url = request.GET.get('next', None)
     if next_url:
         request.session['healthvault_next'] = next_url
     else:
         request.session.pop('healthvault_next', None)
 
+    # Microsoft will send a callback to this URL so that we can store
+    # authorization credentials.
+    callback_url = request.build_absolute_uri(reverse('healthvault-complete'))
+
+    # Build the authorization URL.
     server = utils.get_setting('HEALTHVAULT_SHELL_SERVER')
     app_id = utils.get_setting('HEALTHVAULT_APP_ID')
-    callback_url = request.build_absolute_uri(reverse('healthvault-complete'))
     target = 'APPAUTH'
     targetqs = urlencode({'appid': app_id, 'redirect': callback_url})
-    parameters = urlencode({'target': target, 'targetqs': targetqs})
-    url = 'https://{0}/redirect.aspx?{1}'.format(server, parameters)
-    return redirect(url)
+    params = urlencode({'target': target, 'targetqs': targetqs})
+    authorization_url = 'https://{0}/redirect.aspx?{1}'.format(server, params)
+
+    return redirect(authorization_url)
 
 
 @login_required
 def complete(request):
     token = request.GET.get('wctoken', None)
     if not token:
+        request.session.pop('healthvault_next', None)
         return redirect(reverse('healthvault_error'))
     hvuser, _ = HealthVaultUser.objects.get_or_create(user=request.user)
     hvuser.token = token
