@@ -1,1 +1,2 @@
 Django>=1.4
+-e git+https://github.com/caktus/python-healthvault.git#egg=python-healthvault
