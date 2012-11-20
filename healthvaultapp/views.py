@@ -2,6 +2,7 @@ import logging
 from urllib import urlencode
 
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect, render
 
@@ -74,27 +75,27 @@ def complete(request):
     if not token:
         logger.error('request.GET = ' + str(request.GET))
         logger.error('wctoken was not provided in the URL.')
-        return _error_redirect(request)
+        return redirect(reverse('healthvault-error'))
 
     # Create a connection to retrieve the person_id and record_id.
-    try:
-        conn = utils.create_connection(wctoken=token)
-    except HealthVaultException as e:
-        logger.exception(e)
-        return _error_redirect(request)
+    conn = utils.create_connection(wctoken=token)
     if not conn.record_id:
         logger.error('Connection did not find a record_id.')
-        return _error_redirect(request)
+        return redirect(reverse('healthvault-error'))
 
     # Save the user's authorization information.
-    hvuser, _ = HealthVaultUser.objects.get_or_create(user=request.user)
+    hvuser, created = HealthVaultUser.objects.get_or_create(user=request.user)
     hvuser.record_id = conn.record_id
     hvuser.token = token
     try:
-        hvuser.save()
-    except Exception as e:
+        hvuser.full_clean()
+    except ValidationError as e:
+        if created:  # Don't create an object, but keep old info if available
+            hvuser.delete()
         logger.exception(e)
-        return _error_redirect(request)
+        return redirect(reverse('healthvault-error'))
+    else:
+        hvuser.save()
 
     # Redirect the user to the stored redirect URL or default.
     next_url = request.session.pop(NEXT_SESSION_KEY, None)
@@ -102,23 +103,14 @@ def complete(request):
     return redirect(next_url)
 
 
-def _error_redirect(request):
-    """Removes the next URL from the session & redirects to the error page.
-
-    A view can return the result of this function instead of a redirect.
-    """
-    request.session.pop(NEXT_SESSION_KEY, None)
-    return redirect(reverse('healthvault-error'))
-
-
 @login_required
 def error(request, extra_context=None):
     """
     The user is redirected to this view if we encounter an error while
-    acquiring their HealthVault credentials. It renders the template defined
-    in the setting :ref:`HEALTHVAULT_ERROR_TEMPLATE`. The default template,
-    located at *healthvaultapp/error.html*, simply informs the user of the
-    error::
+    acquiring their HealthVault credentials. It removes NEXT_SESSION_KEY from
+    the session if it exists, and renders the template defined in the setting
+    :ref:`HEALTHVAULT_ERROR_TEMPLATE`. The default template, located at
+    *healthvaultapp/error.html*, simply informs the user of the error::
 
         <html>
             <head>
@@ -137,6 +129,7 @@ def error(request, extra_context=None):
     URL name:
         `healthvault-error`
     """
+    request.session.pop(NEXT_SESSION_KEY, None)
     return render(request, utils.get_setting('HEALTHVAULT_ERROR_TEMPLATE'),
             extra_context or {})
 

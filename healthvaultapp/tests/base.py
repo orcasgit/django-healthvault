@@ -12,17 +12,22 @@ from healthvaultapp.models import HealthVaultUser
 
 class MockHealthVaultConnection(object):
 
-    def __init__(self, **kwargs):
-        pass
+    def __init__(self, record_id=None, auth_url=None, **kwargs):
+        self.record_id = record_id
+        self.auth_url = auth_url
 
     def authorization_url(self, callback_url):
-        return '/test'
+        return self.auth_url
 
 
 class HealthVaultTestBase(TestCase):
     TEST_SERVER = 'http://testserver'
 
     def setUp(self):
+        self.record_id = '12345678-1234-1234-1234-123456789012'
+        self.authorization_url = '/test'
+        self.token = 'testtoken'
+
         self.username = self.random_string(25)
         self.password = self.random_string(25)
         self.user = self.create_user(username=self.username,
@@ -51,6 +56,7 @@ class HealthVaultTestBase(TestCase):
     def create_healthvault_user(self, **kwargs):
         defaults = {
             'user': kwargs.pop('user', self.create_user()),
+            'record_id': self.random_string(25),
             'token': self.random_string(25),
         }
         defaults.update(kwargs)
@@ -72,7 +78,7 @@ class HealthVaultTestBase(TestCase):
         self.assertEqual(response.status_code, status_code)
         if url.startswith('/'):
             url = self.TEST_SERVER + url
-        response_url = response._headers['location'][1]
+        response_url = response['location']
         if not use_params:
             response_url = splitquery(response_url)[0]
         self.assertEqual(response_url, url)
@@ -97,12 +103,21 @@ class HealthVaultTestBase(TestCase):
         except AttributeError:
             pass
 
+    def _del_session_vars(self, *args):
+        session = self.client.session
+        for arg in args:
+            session.pop(arg, None)
+
     @patch('healthvaultapp.utils.HealthVaultConn')
     def _mock_connection_get(self, conn=None, conn_kwargs=None, **kwargs):
         """
         Retrieves the requested information, using a mock object in place of
         healthvaultlib.HealthVaultConnection.
         """
-        conn_kwargs = conn_kwargs or {}
-        conn.return_value = MockHealthVaultConnection(**conn_kwargs)
+        defaults = {
+            'record_id': self.record_id,
+            'auth_url': self.authorization_url,
+        }
+        defaults.update(conn_kwargs or {})
+        conn.return_value = MockHealthVaultConnection(**defaults)
         return self._get(**kwargs)

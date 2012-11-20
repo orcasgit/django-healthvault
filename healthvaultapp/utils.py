@@ -35,7 +35,7 @@ def create_connection(wctoken=None, **kwargs):
     for key, value in config.items():
         if not value:
             msg = 'Your {0} cannot be null, and must be explicitly ' \
-                    'specified or set in your Django settings.'
+                    'specified or set in your Django settings.'.format(key)
             raise ImproperlyConfigured(msg)
 
     try:
@@ -48,6 +48,7 @@ def create_connection(wctoken=None, **kwargs):
     except HealthVaultException as e:
         logger.error(e)
         raise e
+    return conn
 
 
 def get_setting(name, use_defaults=True):

@@ -23,6 +23,13 @@ if not settings.configured:
         ROOT_URLCONF='healthvaultapp.urls',
         SECRET_KEY='this-is-just-for-tests-so-not-that-secret',
         SITE_ID=1,
+
+        HEALTHVAULT_APP_ID='test_app_id',
+        HEALTHVAULT_THUMBPRINT='test_thumbprint',
+        HEALTHVAULT_PUBLIC_KEY=12345678L,
+        HEALTHVAULT_PRIVATE_KEY=12345678L,
+        HEALTHVAULT_SERVER='test_server',
+        HEALTHVAULT_SHELL_SERVER='test_shell_server',
     )
 
 
