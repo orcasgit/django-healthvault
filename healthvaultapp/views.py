@@ -43,9 +43,18 @@ def authorize(request):
     # authorization credentials.
     callback_url = request.build_absolute_uri(reverse('healthvault-complete'))
 
+    # Get the record id from the existing HealthVaultUser (if it exists) so
+    # that we can request authorization for a specific record.
+    try:
+        hvuser = HealthVaultUser.objects.get(user=request.user)
+    except HealthVaultUser.DoesNotExist:
+        record_id = None
+    else:
+        record_id = hvuser.record_id
+
     # Build the authorization URL.
     conn = utils.create_connection()
-    authorization_url = conn.authorization_url(callback_url)
+    authorization_url = conn.authorization_url(callback_url, record_id)
 
     return redirect(authorization_url)
 

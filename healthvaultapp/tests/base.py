@@ -16,7 +16,7 @@ class MockHealthVaultConnection(object):
         self.record_id = record_id
         self.auth_url = auth_url
 
-    def authorization_url(self, callback_url):
+    def authorization_url(self, callback_url, record_id=None):
         return self.auth_url
 
 
