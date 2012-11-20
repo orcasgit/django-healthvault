@@ -1,9 +1,11 @@
-# Your project must provide the following HealthVault app access credentials:
-#   HEALTHVAULT_APP_ID
-#   HEALTHVAULT_THUMBPRINT
-#   HEALTHVAULT_PUBLIC_KEY
-#   HEALTHVAULT_PRIVATE_KEY
-#   HEALTHVAULT_SHELL_SERVER
+# Your project must provide non-null values for these HealthVault access
+# credentials:
+HEALTHVAULT_APP_ID = None
+HEALTHVAULT_THUMBPRINT = None
+HEALTHVAULT_PUBLIC_KEY = None
+HEALTHVAULT_PRIVATE_KEY = None
+HEALTHVAULT_SERVER = None
+HEALTHVAULT_SHELL_SERVER = None
 
 # Where to redirect to after successful completion of HealthVault integration.
 HEALTHVAULT_AUTHORIZE_REDIRECT = '/'
