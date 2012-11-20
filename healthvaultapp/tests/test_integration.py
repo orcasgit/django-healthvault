@@ -1,5 +1,7 @@
 from django.core.urlresolvers import reverse
 
+from healthvaultlib.healthvault import HealthVaultException
+
 from healthvaultapp import utils
 from healthvaultapp.models import HealthVaultUser
 from healthvaultapp.views import NEXT_GET_PARAM, NEXT_SESSION_KEY
@@ -104,13 +106,15 @@ class TestCompleteView(HealthVaultTestBase):
         self.assertRedirectsNoFollow(response, reverse('healthvault-error'))
         self.assertEqual(HealthVaultUser.objects.count(), 0)
 
-    def test_no_record_id(self):
+    def test_healthvault_exception(self):
+        """Complete view should redirect to error if connection fails."""
         self.record_id = None
-        response = self._mock_connection_get()
+        response = self._mock_connection_get(side_effect=HealthVaultException)
         self.assertRedirectsNoFollow(response, reverse('healthvault-error'))
         self.assertEqual(HealthVaultUser.objects.count(), 0)
 
     def test_record_id_too_long(self):
+        """Complete view should redirect to error if database save fails."""
         self.record_id = 'this_record_id_is_greater_than_thirty_six_chars'
         response = self._mock_connection_get()
         self.assertRedirectsNoFollow(response, reverse('healthvault-error'))

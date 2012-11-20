@@ -110,7 +110,8 @@ class HealthVaultTestBase(TestCase):
             session.pop(arg, None)
 
     @patch('healthvaultapp.utils.HealthVaultConn')
-    def _mock_connection_get(self, conn=None, conn_kwargs=None, **kwargs):
+    def _mock_connection_get(self, conn=None, conn_kwargs=None,
+            side_effect=None, **kwargs):
         """
         Retrieves the requested information, using a mock object in place of
         healthvaultlib.HealthVaultConnection.
@@ -121,6 +122,7 @@ class HealthVaultTestBase(TestCase):
         }
         defaults.update(conn_kwargs or {})
         conn.return_value = MockHealthVaultConnection(**defaults)
+        conn.side_effect = side_effect
         return self._get(**kwargs)
 
     @patch('healthvaultapp.utils.HealthVaultConn')

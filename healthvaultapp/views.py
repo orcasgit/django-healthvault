@@ -87,9 +87,10 @@ def complete(request):
         return redirect(reverse('healthvault-error'))
 
     # Create a connection to retrieve the person_id and record_id.
-    conn = utils.create_connection(wctoken=token)
-    if not conn.record_id:
-        logger.error('Connection did not find a record_id.')
+    try:
+        conn = utils.create_connection(wctoken=token)
+    except HealthVaultException as e:
+        logger.exception('Error in creating a HealthVault connection: ')
         return redirect(reverse('healthvault-error'))
 
     # Save the user's authorization information.
@@ -101,7 +102,7 @@ def complete(request):
     except ValidationError as e:
         if created:  # Don't create an object, but keep old info if available
             hvuser.delete()
-        logger.exception(e)
+        logger.exception('Error while saving to the database: ')
         return redirect(reverse('healthvault-error'))
     else:
         hvuser.save()
