@@ -64,7 +64,7 @@ def get_setting(name, use_defaults=True):
     elif use_defaults:
         if hasattr(defaults, name):
             return getattr(defaults, name)
-    msg = "{0} must be specified in your settings".format(name)
+    msg = '{0} must be specified in your settings'.format(name)
     raise ImproperlyConfigured(msg)
 
 
