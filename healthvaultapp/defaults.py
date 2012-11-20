@@ -1,3 +1,5 @@
+from django.conf import settings
+
 # Your project must provide non-null values for these HealthVault access
 # credentials:
 HEALTHVAULT_APP_ID = None
@@ -6,6 +8,9 @@ HEALTHVAULT_PUBLIC_KEY = None
 HEALTHVAULT_PRIVATE_KEY = None
 HEALTHVAULT_SERVER = None
 HEALTHVAULT_SHELL_SERVER = None
+
+# Set this to False when your HealthVault project is operating in production.
+HEALTHVAULT_IN_DEVELOPMENT = getattr(settings, 'DEBUG', True)
 
 # Where to redirect to after successful completion of HealthVault integration.
 HEALTHVAULT_AUTHORIZE_REDIRECT = '/'

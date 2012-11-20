@@ -13,12 +13,17 @@ from healthvaultapp.models import HealthVaultUser
 
 class MockHealthVaultConnection(object):
 
-    def __init__(self, record_id=None, auth_url=None, **kwargs):
+    def __init__(self, record_id=None, auth_url=None, deauth_url=None,
+            **kwargs):
         self.record_id = record_id
         self.auth_url = auth_url
+        self.deauth_url = deauth_url
 
-    def authorization_url(self, callback_url, record_id=None):
+    def authorization_url(self, callback_url=None, record_id=None):
         return self.auth_url
+
+    def deauthorization_url(self, callback_url=None):
+        return self.deauth_url
 
 
 class HealthVaultTestBase(TestCase):
@@ -26,7 +31,8 @@ class HealthVaultTestBase(TestCase):
 
     def setUp(self):
         self.record_id = '12345678-1234-1234-1234-123456789012'
-        self.authorization_url = '/test'
+        self.authorization_url = '/authorize'
+        self.deauthorization_url = '/deauthorize'
         self.token = 'testtoken'
 
         self.username = self.random_string(25)
@@ -119,6 +125,7 @@ class HealthVaultTestBase(TestCase):
         defaults = {
             'record_id': self.record_id,
             'auth_url': self.authorization_url,
+            'deauth_url': self.deauthorization_url,
         }
         defaults.update(conn_kwargs or {})
         conn.return_value = MockHealthVaultConnection(**defaults)
@@ -131,6 +138,7 @@ class HealthVaultTestBase(TestCase):
         defaults = {
             'record_id': self.record_id,
             'auth_url': self.authorization_url,
+            'deauth_url': self.deauthorization_url,
         }
         defaults.update(conn_kwargs or {})
         conn.return_value = MockHealthVaultConnection(**defaults)

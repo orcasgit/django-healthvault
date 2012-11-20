@@ -80,3 +80,17 @@ def is_integrated(user):
     if user.is_authenticated() and user.is_active:
         return HealthVaultUser.objects.filter(user=user).exists()
     return False
+
+
+def get_callback_url(request):
+    """
+    Returns the callback url that HealthVault should use after the user makes
+    changes to this application's permissions.
+
+    If this project is running in production, HealthVault will always callback
+    to the URL defined in the application's ActionURL. Since an error may
+    occur if an alternative callback is provided, we return None.
+    """
+    if get_setting('HEALTHVAULT_IN_DEVELOPMENT'):
+        return request.build_absolute_uri(reverse('healthvault-complete'))
+    return None
