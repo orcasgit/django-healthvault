@@ -1,4 +1,3 @@
-from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse
 
 from healthvaultapp import utils
@@ -6,24 +5,6 @@ from healthvaultapp.models import HealthVaultUser
 from healthvaultapp.views import NEXT_GET_PARAM, NEXT_SESSION_KEY
 
 from .base import HealthVaultTestBase
-
-
-class TestIntegrationUtility(HealthVaultTestBase):
-    """Tests for healthvaultapp.utils.is_integrated"""
-
-    def test_is_integrated(self):
-        """Users with stored authentication data are integrated."""
-        self.assertTrue(utils.is_integrated(self.user))
-
-    def test_is_not_integrated(self):
-        """Integration requires user authentication data."""
-        HealthVaultUser.objects.all().delete()
-        self.assertFalse(utils.is_integrated(self.user))
-
-    def test_unauthenticated(self):
-        """Only logged-in users can be integrated."""
-        user = AnonymousUser()
-        self.assertFalse(utils.is_integrated(user))
 
 
 class TestAuthorizeView(HealthVaultTestBase):

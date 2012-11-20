@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from healthvaultapp import utils
 from healthvaultapp.models import HealthVaultUser
 
 
@@ -121,3 +122,15 @@ class HealthVaultTestBase(TestCase):
         defaults.update(conn_kwargs or {})
         conn.return_value = MockHealthVaultConnection(**defaults)
         return self._get(**kwargs)
+
+    @patch('healthvaultapp.utils.HealthVaultConn')
+    def _create_mock_connection(self, conn=None, conn_kwargs=None,
+            side_effect=None, **kwargs):
+        defaults = {
+            'record_id': self.record_id,
+            'auth_url': self.authorization_url,
+        }
+        defaults.update(conn_kwargs or {})
+        conn.return_value = MockHealthVaultConnection(**defaults)
+        conn.side_effect = side_effect
+        return utils.create_connection(**kwargs)
