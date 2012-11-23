@@ -18,6 +18,9 @@ HEALTHVAULT_AUTHORIZE_REDIRECT = '/'
 # Where to redirect to after removal of HealthVault credentials.
 HEALTHVAULT_DEAUTHORIZE_REDIRECT = '/'
 
+# Where to redirect to if user denies us access to their HealthVault account.
+HEALTHVAULT_DENIED_REDIRECT = '/'
+
 # The template to use when an unavoidable error occurs during HealthVault
 # integration.
 HEALTHVAULT_ERROR_TEMPLATE = 'healthvaultapp/error.html'

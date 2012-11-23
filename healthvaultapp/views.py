@@ -8,33 +8,33 @@ from django.http import Http404
 from django.shortcuts import redirect, render
 
 from healthvaultlib.healthvault import HealthVaultException
+from healthvaultlib.targets import ApplicationTarget
 
 from . import utils
 from .models import HealthVaultUser
 
 
+KEEP_GET_PARAM = 'keep'
 NEXT_SESSION_KEY = 'healthvault_next'
 NEXT_GET_PARAM = 'next'
-
-# TODO - should these be constants in python-healthvault?
-# TODO - I don't think these are all-inclusive; need to check the docs
-DEAUTHORIZE_TARGET = 'SIGNOUT'
-AUTHORIZE_TARGET = 'APPAUTH'
 
 
 @login_required
 def authorize(request):
     """
-    Begins the HealthVault authentication process by redirecting the user to
-    a URL at which they can authorize us to access their HealthVault account.
+    Begins the HealthVault integration process by redirecting the logged-in
+    user to a HealthVault URL where they can authorize our application to
+    access their HealthVault account data.
 
-    When the user has finished at the HealthVault site, they will be
-    redirected to the :py:func:`healthvaultapp.views.complete` view so that we
-    can complete the authorization process & redirect the user to the next
-    view.
+    Unless request.GET['keep'] = False, if we have pre-existing access
+    credentials for the user we request access to the specific record that
+    they previously granted us access to.
 
-    If NEXT_GET_PARAM is provided in the GET data, it is saved in
-    NEXT_SESSION_KEY so the :py:func:`healthvaultapp.views.complete` view can
+    After the user finishes at the HealthVault site, they will be redirected
+    to the :py:func:`healthvaultapp.views.complete` view so that we can
+    complete the authorization process & redirect the user to the next page.
+    If request.GET['next'] is provided, it is saved in the 'healthvault_next'
+    session key so the :py:func:`healthvaultapp.views.complete` view can
     redirect the user to that URL after successful authorization.
 
     URL name:
@@ -47,20 +47,23 @@ def authorize(request):
     else:
         request.session.pop(NEXT_SESSION_KEY, None)
 
-    # HealthVault will send a callback to this URL with target=APPAUTH so that
-    # we can complete the authorization process.
+    # HealthVault will send a callback to this URL so that we can complete the
+    # authorization process.
     callback_url = utils.get_callback_url(request)
 
     # Get the record id from the existing HealthVaultUser (if it exists) so
     # that we can request authorization for a specific record.
-    try:
-        hvuser = HealthVaultUser.objects.get(user=request.user)
-    except HealthVaultUser.DoesNotExist:
-        record_id = None
-    else:
-        record_id = hvuser.record_id
+    keep = request.GET.get(KEEP_GET_PARAM, True)
+    record_id = None
+    if keep:
+        try:
+            hvuser = HealthVaultUser.objects.get(user=request.user)
+        except HealthVaultUser.DoesNotExist:
+            pass
+        else:
+            record_id = hvuser.record_id
 
-    # Build the authorization URL.
+    # Build the authorization URL to which we redirect the user.
     conn = utils.create_connection()
     authorization_url = conn.authorization_url(callback_url, record_id)
 
@@ -69,20 +72,20 @@ def authorize(request):
 
 @login_required
 def deauthorize(request):
-    """Removes the user's HealthVault credentials, and redirects them to a
-    HealthVault URL that deauthorizes us from accessing HealthVault on the
-    user's behalf.
+    """
+    Removes our record of the user's HealthVault credentials, and redirects
+    them to a HealthVault URL that deauthorizes us from accessing HealthVault
+    on the user's behalf.
 
     After the deauthorization is complete, HealthVault will redirect to the
     :py:func:`healthvaultapp.views.complete` view so that we can complete the
-    deauthorization process & redirect the user to the next view.
-
-    If NEXT_GET_PARAM is provided in the GET data, it is saved in
-    NEXT_SESSION_KEY so  the :py:func:`healthvaultapp.views.complete` view can
+    deauthorization process & redirect the user to the next page. If
+    request.GET['next'] is provided, it is saved in the 'healthvault_next'
+    session key so  the :py:func:`healthvaultapp.views.complete` view can
     redirect the user to that URL after successful deauthorization.
 
     If we don't have HealthVault credentials for this user, we short-circuit
-    and redirect to either the URL defined in NEXT_GET_PARAM or the
+    and redirect to either the URL defined in request.GET['next'] or the
     :ref:`HEALTHVAULT_DEAUTHORIZE_REDIRECT` setting.
 
     URL name:
@@ -104,8 +107,8 @@ def deauthorize(request):
     else:
         request.session.pop(NEXT_SESSION_KEY, None)
 
-    # HealthVault will send a callback to this URL with target=SIGNOUT so that
-    # we can complete the deauthorization process.
+    # HealthVault will send a callback to this URL so that we can complete the
+    # deauthorization process.
     callback_url = utils.get_callback_url(request)
 
     # Build the deauthorization URL.
@@ -121,39 +124,53 @@ def deauthorize(request):
 @login_required
 def complete(request):
     """
-    URL called by HealthVault after user changes this application's permissions.
+    Callback URL called by HealthVault's Shell Redirect interface. Your
+    application's ActionURL must be set to this URL when your application is
+    in production.
 
-    The action that was taken is described by the 'target' get parameter.
-    If target == AUTHORIZATION_TARGET, we complete the user's authorization
-    and redirect.  If target == DEAUTHORIZATION_TARGET, we complete the user's
-    deauthorization and redirect. If the target is not recognized, this view
-    returns a 404 response.
+    The action that was taken is described by the request.GET['target'].
+    We handle several possible targets:
 
-    If there was an error, the user is redirected again to the
-    :py:func:`healthvaultapp.views.error` view.
+        ApplicationTarget.APPAUTHREJECT
+            The user declined to grant our application access to their data.
+            We remove their HealthVault credentials and redirect them to the
+            URL defined in the :ref:`HEALTHVAULT_DENIED_REDIRECT` setting.
 
-    Otherwise, the user is redirected to another view. If NEXT_SESSION_KEY is
-    in the session, the user is redirected to that URL. Otherwise, they are
-    redirected to the URL specified by the
-    :ref:`HEALTHVAULT_AUTHORIZE_REDIRECT` setting.
+        ApplicationTarget.APPAUTHSUCCESS, ApplicationTarget.SELECTEDRECORDCHANGED
+            The user successfully granted us access to their HealthVault
+            record. SELECTEDRECORDCHANGED is the same as APPAUTHSUCCESS,
+            except that the user granted us access to a different record than
+            before. We overwrite any existing credentials with record and the
+            access token received in the request, and redirect to the URL
+            defined in the 'healthvault_next' session key, or the default URL
+            defined in the :ref:`HEALTHVAULT_AUTHORIZE_REDIRECT` setting.
+
+        ApplicationTarget.SIGNOUT
+            We no longer have access to the user's HealthVault record. We
+            delete their HealthVault credentials, and redirect to the URL
+            defined in the 'healthvault_next' session key, or the default URL
+            defined in the :ref:`HEALTHVAULT_DEAUTHORIZE_REDIRECT` setting.
+
+    If there is an unavoidable error during the completion process, the user
+    is redirected to the :py:func:`healthvaultapp.views.error` view.
 
     URL name:
         `healthvault-complete`
     """
     logger = logging.getLogger('healthvaultapp.views.complete')
-    target = request.GET.get('target', None)
+    target = request.GET.get('target', None).lower()
 
-    if target == DEAUTHORIZE_TARGET:
-        # Re-delete our copy of the user's data, just in case.
+    # The user declined to grant our application access.
+    if target == ApplicationTarget.APPAUTHREJECT:
         HealthVaultUser.objects.filter(user=request.user).delete()
 
-        # Redirect the user to the stored redirect URL or default.
-        next_url = request.session.pop(NEXT_SESSION_KEY, None)
-        if not next_url:
-            next_url = utils.get_setting('HEALTHVAULT_DEAUTHORIZE_REDIRECT')
-        return redirect(next_url)
+        # Redirect the user to the default denial URL.
+        request.session.pop(NEXT_SESSION_KEY, None)  # Clear the session key.
+        return redirect(utils.get_setting('HEALTHVAULT_DENIED_REDIRECT'))
 
-    elif target == AUTHORIZE_TARGET:
+    # Complete the authorization process.
+    elif (target == ApplicationTarget.APPAUTHSUCCESS or
+            target == ApplicationTarget.SELECTEDRECORDCHANGED):
         # Break down the request to get the authorization token.
         token = request.GET.get('wctoken', None)
         if not token:
@@ -189,10 +206,24 @@ def complete(request):
             next_url = utils.get_setting('HEALTHVAULT_AUTHORIZE_REDIRECT')
         return redirect(next_url)
 
-    else:
-        logger.error('Unknown target: {0}'.format(target))
+    # Complete the deauthorization process.
+    if target == ApplicationTarget.SIGNOUT:
+        # Re-delete our copy of the user's data, just in case.
+        HealthVaultUser.objects.filter(user=request.user).delete()
+
+        # Redirect the user to the stored redirect URL or default.
+        next_url = request.session.pop(NEXT_SESSION_KEY, None)
+        if not next_url:
+            next_url = utils.get_setting('HEALTHVAULT_DEAUTHORIZE_REDIRECT')
+        return redirect(next_url)
+
+    elif target in ApplicationTarget.all_targets():
         request.session.pop(NEXT_SESSION_KEY, None)
-        raise Http404
+        raise Exception('Unhandled target: {0}'.format(target))
+
+    else:
+        request.session.pop(NEXT_SESSION_KEY, None)
+        raise Exception('Unknown target: {0}'.format(target))
 
 
 @login_required

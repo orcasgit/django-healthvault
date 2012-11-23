@@ -6,4 +6,4 @@ Utilities
 is_integrated
 -------------
 
-.. autofunction:: healthvault.utils.is_integrated
+.. autofunction:: healthvaultapp.utils.is_integrated

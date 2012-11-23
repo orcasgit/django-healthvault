@@ -39,7 +39,7 @@ You  must specify a non-null value for this setting.
 .. _HEALTHVAULT_AUTHORIZE_REDIRECT:
 
 HEALTHVAULT_AUTHORIZE_REDIRECT
---------------------------
+------------------------------
 
 :Default: ``'/'``
 
@@ -50,7 +50,14 @@ variable.
 .. _HEALTHVAULT_DEAUTHORIZE_REDIRECT:
 
 HEATHVAULT_DEAUTHORIZE_REDIRECT
---------------------------
+-------------------------------
+
+:Default: ``'/'``
+
+.. _HEALTHVAULT_DENIED_REDIRECT:
+
+HEALTHVAULT_DENIED_REDIRECT
+---------------------------
 
 :Default: ``'/'``
 
