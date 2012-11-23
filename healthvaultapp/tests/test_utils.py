@@ -1,7 +1,11 @@
 from mock import patch
 
+from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ImproperlyConfigured
+from django.core.urlresolvers import reverse
+from django.http import HttpRequest
+from django.test.utils import override_settings
 
 from healthvaultlib.healthvault import HealthVaultException
 
@@ -68,3 +72,27 @@ class TestConnectionUtility(HealthVaultTestBase):
         with self.assertRaises(HealthVaultException):
             side_effect = HealthVaultException
             connection = self._create_mock_connection(side_effect=side_effect)
+
+
+class TestCallbackURLUtility(HealthVaultTestBase):
+    """Tests for healthvaultapp.utils.get_callback_url"""
+
+    @override_settings(HEALTHVAULT_IN_DEVELOPMENT=True)
+    def test_in_development(self):
+        """Should return a full path to healthvault-complete."""
+        fake_request = HttpRequest()
+        fake_request.build_absolute_uri = lambda x: 'http://test.com' + x
+        url = utils.get_callback_url(fake_request)
+        callback = reverse('healthvault-complete')
+        correct_url = fake_request.build_absolute_uri(callback)
+        self.assertEqual(url, correct_url)
+
+    @override_settings(HEALTHVAULT_IN_DEVELOPMENT=False)
+    def test_in_production(self):
+        """
+        Should return None, as this is handled by the application's
+        HealthVault settings.
+        """
+        fake_request = HttpRequest()
+        url = utils.get_callback_url(fake_request)
+        self.assertEqual(url, None)

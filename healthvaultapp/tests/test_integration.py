@@ -1,11 +1,11 @@
 from django.core.urlresolvers import reverse
 
 from healthvaultlib.healthvault import HealthVaultException
+from healthvaultlib.targets import ApplicationTarget
 
 from healthvaultapp import utils
 from healthvaultapp.models import HealthVaultUser
 from healthvaultapp.views import NEXT_GET_PARAM, NEXT_SESSION_KEY
-from healthvaultapp.views import AUTHORIZE_TARGET, DEAUTHORIZE_TARGET
 
 from .base import HealthVaultTestBase
 
@@ -96,7 +96,7 @@ class TestDeauthorizeView(HealthVaultTestBase):
 
 
 class TestCompleteView(HealthVaultTestBase):
-    """General tests for healthvaultapp.views.complete"""
+    """Tests for healthvaultapp.views.complete - General"""
     url_name = 'healthvault-complete'
 
     def test_anonymous(self):
@@ -108,30 +108,63 @@ class TestCompleteView(HealthVaultTestBase):
         self.assertEqual(HealthVaultUser.objects.count(), 1)
 
     def test_no_target(self):
-        """Complete view should 404 if target is not given."""
-        response = self._get(get_params={'target': None})
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(HealthVaultUser.objects.count(), 1)
+        """Complete view should throw Exception if target is not given."""
+        with self.assertRaises(Exception) as e:
+            response = self._get(get_params={'target': None})
+            self.assertEqual(e.message, 'Unknown target: None')
 
     def test_bad_target(self):
-        """Complete view should 404 if target is not recognized."""
-        response = self._get(get_params={'target': 'bad'})
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.status_code, 404)
+        """Complete view should throw Exception if target is not recognized."""
+        with self.assertRaises(Exception) as e:
+            response = self._get(get_params={'target': 'bad'})
+            self.assertEqual(e.message, 'Unknown target: bad')
+
+    def test_unhandled_target(self):
+        """Complete view should throw Exception if target is unhandled."""
+        with self.assertRaises(Exception) as e:
+            response = self._get(get_params={'target': 'EditRecordComplete'})
+            correct = 'Unhandled target: EditRecordComplete'
+            self.assertEqual(e.message, correct)
 
 
-class TestCompleteAuthorizationView(HealthVaultTestBase):
-    """Tests for healthvaultapp.views.complete when target=APPAUTH"""
+class TestCompleteView_APPAUTHREJECT(HealthVaultTestBase):
+    """Tests for healthvaultapp.views.complete - APPAUTHREJECT"""
     url_name = 'healthvault-complete'
+    target = ApplicationTarget.APPAUTHREJECT
+
+    def _get(self, get_params=None, **kwargs):
+        get_params = get_params or {'target': self.target}
+        return super(TestCompleteView_APPAUTHREJECT, self)._get(
+                get_params=get_params, **kwargs)
+
+    def test_integrated(self):
+        """Should delete credentials and redirect."""
+        response = self._mock_connection_get()
+        redirect_url = utils.get_setting('HEALTHVAULT_DENIED_REDIRECT')
+        self.assertRedirectsNoFollow(response, redirect_url)
+        self.assertEqual(HealthVaultUser.objects.count(), 0)
+
+    def test_unintegrated(self):
+        """Should redirect to denial URL."""
+        response = self._mock_connection_get()
+        redirect_url = utils.get_setting('HEALTHVAULT_DENIED_REDIRECT')
+        self.assertRedirectsNoFollow(response, redirect_url)
+        self.assertEqual(HealthVaultUser.objects.count(), 0)
+
+
+class TestCompleteView_APPAUTHSUCCESS(HealthVaultTestBase):
+    """Tests for healthvaultapp.views.complete - APPAUTHSUCCESS"""
+    url_name = 'healthvault-complete'
+    target = ApplicationTarget.APPAUTHSUCCESS
 
     def setUp(self):
-        super(TestCompleteAuthorizationView, self).setUp()
+        super(TestCompleteView_APPAUTHSUCCESS, self).setUp()
         self.hvuser.delete()
 
     def _get(self, get_params=None, **kwargs):
         if get_params is None:
-            get_params = {'wctoken': self.token, 'target': AUTHORIZE_TARGET}
-        return super(TestCompleteAuthorizationView, self)._get(
+            get_params = {'wctoken': self.token, 'target': self.target}
+        return super(TestCompleteView_APPAUTHSUCCESS, self)._get(
                 get_params=get_params, **kwargs)
 
     def test_unintegrated(self):
@@ -167,7 +200,7 @@ class TestCompleteAuthorizationView(HealthVaultTestBase):
 
     def test_no_token(self):
         """Complete view should redirect to error if wctoken is not given."""
-        get_params = {'target': AUTHORIZE_TARGET}
+        get_params = {'target': 'AppAuthSuccess'}
         response = self._mock_connection_get(get_params=get_params)
         self.assertRedirectsNoFollow(response, reverse('healthvault-error'))
         self.assertEqual(HealthVaultUser.objects.count(), 0)
@@ -187,14 +220,22 @@ class TestCompleteAuthorizationView(HealthVaultTestBase):
         self.assertEqual(HealthVaultUser.objects.count(), 0)
 
 
-class TestCompleteDeauthorizationView(HealthVaultTestBase):
-    """Tests for healthvaultapp.views.complete when target=SIGNOUT"""
+class TestCompleteView_SELECTEDRECORDCHANGED(TestCompleteView_APPAUTHSUCCESS):
+    """Tests for healthvaultapp.views.complete - SELECTEDRECORDCHANGED
+
+    Should behave the same way as APPAUTHSUCCESS.
+    """
+    target = ApplicationTarget.SELECTEDRECORDCHANGED
+
+
+class TestCompleteView_SIGNOUT(HealthVaultTestBase):
+    """Tests for healthvaultapp.views.complete - Deauthorization completion"""
     url_name = 'healthvault-complete'
+    target = ApplicationTarget.SIGNOUT
 
     def _get(self, get_params=None, **kwargs):
-        if get_params is None:
-            get_params = {'wctoken': self.token, 'target': DEAUTHORIZE_TARGET}
-        return super(TestCompleteDeauthorizationView, self)._get(
+        get_params = get_params or {'target': self.target}
+        return super(TestCompleteView_SIGNOUT, self)._get(
                 get_params=get_params, **kwargs)
 
     def test_unintegrated(self):

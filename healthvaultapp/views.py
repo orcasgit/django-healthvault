@@ -158,7 +158,7 @@ def complete(request):
         `healthvault-complete`
     """
     logger = logging.getLogger('healthvaultapp.views.complete')
-    target = request.GET.get('target', None).lower()
+    target = request.GET.get('target', None)
 
     # The user declined to grant our application access.
     if target == ApplicationTarget.APPAUTHREJECT:
