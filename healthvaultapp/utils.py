@@ -2,6 +2,7 @@ import logging
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.core.urlresolvers import reverse
 
 from healthvaultlib.healthvault import HealthVaultConn, HealthVaultException
 
@@ -34,7 +35,7 @@ def create_connection(wctoken=None, **kwargs):
 
     for key, value in config.items():
         if not value:
-            msg = 'Your {0} cannot be null, and must be explicitly ' \
+            msg = '{0} cannot be null, and must be explicitly ' \
                     'specified or set in your Django settings.'.format(key)
             raise ImproperlyConfigured(msg)
 
@@ -70,14 +71,13 @@ def get_setting(name, use_defaults=True):
 
 
 def is_integrated(user):
-    """Returns ``True`` if we have HealthVault authentication data for the
-    user.
-
-    This does not require that the authentication data is valid.
+    """
+    Returns ``True`` if we have HealthVault authentication data for the
+    user. This does not require that the authentication data is valid.
 
     :param user: A Django user.
     """
-    if user.is_authenticated() and user.is_active:
+    if user and user.is_authenticated() and user.is_active:
         return HealthVaultUser.objects.filter(user=user).exists()
     return False
 
