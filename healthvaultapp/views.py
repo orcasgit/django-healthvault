@@ -31,10 +31,10 @@ def authorize(request):
     they previously granted us access to.
 
     After the user finishes at the HealthVault site, they will be redirected
-    to the :py:func:`healthvaultapp.views.complete` view so that we can
+    to the :py:func:`~healthvaultapp.views.complete` view so that we can
     complete the authorization process & redirect the user to the next page.
     If request.GET['next'] is provided, it is saved in the 'healthvault_next'
-    session key so the :py:func:`healthvaultapp.views.complete` view can
+    session key so the :py:func:`~healthvaultapp.views.complete` view can
     redirect the user to that URL after successful authorization.
 
     URL name:
@@ -78,7 +78,7 @@ def deauthorize(request):
     on the user's behalf.
 
     After the deauthorization is complete, HealthVault will redirect to the
-    :py:func:`healthvaultapp.views.complete` view so that we can complete the
+    :py:func:`~healthvaultapp.views.complete` view so that we can complete the
     deauthorization process & redirect the user to the next page. If
     request.GET['next'] is provided, it is saved in the 'healthvault_next'
     session key so  the :py:func:`healthvaultapp.views.complete` view can
@@ -86,7 +86,8 @@ def deauthorize(request):
 
     If we don't have HealthVault credentials for this user, we short-circuit
     and redirect to either the URL defined in request.GET['next'] or the
-    :ref:`HEALTHVAULT_DEAUTHORIZE_REDIRECT` setting.
+    :py:data:`~healthvaultapp.defaults.HEALTHVAULT_DEAUTHORIZE_REDIRECT`
+    setting.
 
     URL name:
         `healthvault-deauthorize`
@@ -134,7 +135,8 @@ def complete(request):
         ApplicationTarget.APPAUTHREJECT
             The user declined to grant our application access to their data.
             We remove their HealthVault credentials and redirect them to the
-            URL defined in the :ref:`HEALTHVAULT_DENIED_REDIRECT` setting.
+            URL defined in the :py:data:`~healthvaultapp.defaults.HEALTHVAULT_DENIED_REDIRECT`
+            setting.
 
         ApplicationTarget.APPAUTHSUCCESS, ApplicationTarget.SELECTEDRECORDCHANGED
             The user successfully granted us access to their HealthVault
@@ -143,16 +145,18 @@ def complete(request):
             before. We overwrite any existing credentials with record and the
             access token received in the request, and redirect to the URL
             defined in the 'healthvault_next' session key, or the default URL
-            defined in the :ref:`HEALTHVAULT_AUTHORIZE_REDIRECT` setting.
+            defined in the :py:data:`~healthvaultapp.defaults.HEALTHVAULT_AUTHORIZE_REDIRECT`
+            setting.
 
         ApplicationTarget.SIGNOUT
             We no longer have access to the user's HealthVault record. We
             delete their HealthVault credentials, and redirect to the URL
             defined in the 'healthvault_next' session key, or the default URL
-            defined in the :ref:`HEALTHVAULT_DEAUTHORIZE_REDIRECT` setting.
+            defined in the :py:data:`~healthvaultapp.defaults.HEALTHVAULT_DEAUTHORIZE_REDIRECT`
+            setting.
 
     If there is an unavoidable error during the completion process, the user
-    is redirected to the :py:func:`healthvaultapp.views.error` view.
+    is redirected to the :py:func:`~healthvaultapp.views.error` view.
 
     URL name:
         `healthvault-complete`
@@ -230,10 +234,11 @@ def complete(request):
 def error(request, extra_context=None):
     """
     The user is redirected to this view if we encounter an error during
-    :py:func:`healthvaultapp.views.complete`. It removes NEXT_SESSION_KEY from
-    the session if it exists, and renders the template defined in the setting
-    :ref:`HEALTHVAULT_ERROR_TEMPLATE`. The default template, located at
-    *healthvaultapp/error.html*, simply informs the user of the error::
+    :py:func:`~healthvaultapp.views.complete`. It removes NEXT_SESSION_KEY from
+    the session if it exists, and renders the template defined in the
+    :py:data:`~healthvaultapp.defaults.HEALTHVAULT_ERROR_TEMPLATE` setting.
+    The default template, located at *healthvaultapp/error.html*, simply
+    informs the user of the error::
 
         <html>
             <head>
