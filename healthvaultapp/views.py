@@ -132,13 +132,13 @@ def complete(request):
     The action that was taken is described by the request.GET['target'].
     We handle several possible targets:
 
-        ApplicationTarget.APPAUTHREJECT
+        ApplicationTarget.APP_AUTH_REJECT
             The user declined to grant our application access to their data.
             We remove their HealthVault credentials and redirect them to the
             URL defined in the :py:data:`~healthvaultapp.defaults.HEALTHVAULT_DENIED_REDIRECT`
             setting.
 
-        ApplicationTarget.APPAUTHSUCCESS, ApplicationTarget.SELECTEDRECORDCHANGED
+        ApplicationTarget.APP_AUTH_SUCCESS, ApplicationTarget.SELECTED_RECORD_CHANGED
             The user successfully granted us access to their HealthVault
             record. SELECTEDRECORDCHANGED is the same as APPAUTHSUCCESS,
             except that the user granted us access to a different record than
@@ -148,7 +148,7 @@ def complete(request):
             defined in the :py:data:`~healthvaultapp.defaults.HEALTHVAULT_AUTHORIZE_REDIRECT`
             setting.
 
-        ApplicationTarget.SIGNOUT
+        ApplicationTarget.SIGN_OUT
             We no longer have access to the user's HealthVault record. We
             delete their HealthVault credentials, and redirect to the URL
             defined in the 'healthvault_next' session key, or the default URL
@@ -165,7 +165,7 @@ def complete(request):
     target = request.GET.get('target', None)
 
     # The user declined to grant our application access.
-    if target == ApplicationTarget.APPAUTHREJECT:
+    if target == ApplicationTarget.APP_AUTH_REJECT:
         HealthVaultUser.objects.filter(user=request.user).delete()
 
         # Redirect the user to the default denial URL.
@@ -173,8 +173,8 @@ def complete(request):
         return redirect(utils.get_setting('HEALTHVAULT_DENIED_REDIRECT'))
 
     # Complete the authorization process.
-    elif (target == ApplicationTarget.APPAUTHSUCCESS or
-            target == ApplicationTarget.SELECTEDRECORDCHANGED):
+    elif (target == ApplicationTarget.APP_AUTH_SUCCESS or
+            target == ApplicationTarget.SELECTED_RECORD_CHANGED):
         # Break down the request to get the authorization token.
         token = request.GET.get('wctoken', None)
         if not token:
@@ -211,7 +211,7 @@ def complete(request):
         return redirect(next_url)
 
     # Complete the deauthorization process.
-    if target == ApplicationTarget.SIGNOUT:
+    if target == ApplicationTarget.SIGN_OUT:
         # Re-delete our copy of the user's data, just in case.
         HealthVaultUser.objects.filter(user=request.user).delete()
 

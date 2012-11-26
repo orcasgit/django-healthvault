@@ -55,7 +55,7 @@ HEALTHVAULT_SERVER = None
 .. warning::
     You must override this setting in your project's settings.
 
-The server address at which to reach HealthVault. For example, for the
+The server address at which to reach HealthVault. For example, the
 pre-production server is "platform.healthvault-ppe.com" in the United States
 and "platform.healthvault-ppe.co.uk" in Europe. For production, drop the "ppe".
 """

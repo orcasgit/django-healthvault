@@ -130,7 +130,7 @@ class TestCompleteView(HealthVaultTestBase):
 class TestCompleteView_APPAUTHREJECT(HealthVaultTestBase):
     """Tests for healthvaultapp.views.complete - APPAUTHREJECT"""
     url_name = 'healthvault-complete'
-    target = ApplicationTarget.APPAUTHREJECT
+    target = ApplicationTarget.APP_AUTH_REJECT
 
     def _get(self, get_params=None, **kwargs):
         get_params = get_params or {'target': self.target}
@@ -155,7 +155,7 @@ class TestCompleteView_APPAUTHREJECT(HealthVaultTestBase):
 class TestCompleteView_APPAUTHSUCCESS(HealthVaultTestBase):
     """Tests for healthvaultapp.views.complete - APPAUTHSUCCESS"""
     url_name = 'healthvault-complete'
-    target = ApplicationTarget.APPAUTHSUCCESS
+    target = ApplicationTarget.APP_AUTH_SUCCESS
 
     def setUp(self):
         super(TestCompleteView_APPAUTHSUCCESS, self).setUp()
@@ -225,13 +225,13 @@ class TestCompleteView_SELECTEDRECORDCHANGED(TestCompleteView_APPAUTHSUCCESS):
 
     Should behave the same way as APPAUTHSUCCESS.
     """
-    target = ApplicationTarget.SELECTEDRECORDCHANGED
+    target = ApplicationTarget.SELECTED_RECORD_CHANGED
 
 
 class TestCompleteView_SIGNOUT(HealthVaultTestBase):
     """Tests for healthvaultapp.views.complete - Deauthorization completion"""
     url_name = 'healthvault-complete'
-    target = ApplicationTarget.SIGNOUT
+    target = ApplicationTarget.SIGN_OUT
 
     def _get(self, get_params=None, **kwargs):
         get_params = get_params or {'target': self.target}
