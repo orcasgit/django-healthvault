@@ -6,8 +6,8 @@ integration.
 
 .. autofunction:: healthvaultapp.views.authorize
 
+.. autofunction:: healthvaultapp.views.deauthorize
+
 .. autofunction:: healthvaultapp.views.complete
 
 .. autofunction:: healthvaultapp.views.error
-
-.. autofunction:: healthvaultapp.views.deauthorize
