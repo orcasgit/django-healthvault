@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import redirect, render
 
-from healthvaultlib.healthvault import HealthVaultException
+from healthvaultlib import exceptions as hv_exceptions
 from healthvaultlib.targets import ApplicationTarget
 
 from . import utils
@@ -51,7 +51,7 @@ def authorize(request):
     # authorization process.
     callback_url = utils.get_callback_url(request)
 
-    # Get the record id from the existing HealthVaultUser (if it exists) so
+    # Get the record_id from the existing HealthVaultUser (if it exists) so
     # that we can request authorization for a specific record.
     keep = request.GET.get(KEEP_GET_PARAM, True)
     record_id = None
@@ -64,8 +64,8 @@ def authorize(request):
             record_id = hvuser.record_id
 
     # Build the authorization URL to which we redirect the user.
-    conn = utils.create_connection()
-    authorization_url = conn.authorization_url(callback_url, record_id)
+    conn = utils.create_connection(record_id=record_id)
+    authorization_url = conn.authorization_url(callback_url)
 
     return redirect(authorization_url)
 
@@ -95,9 +95,7 @@ def deauthorize(request):
     next_url = request.GET.get(NEXT_GET_PARAM, None)
 
     # If the user isn't integrated, shortcut & redirect.
-    try:
-        hvuser = HealthVaultUser.objects.get(user=request.user)
-    except HealthVaultUser.DoesNotExist:
+    if not utils.is_integrated(request.user):
         if not next_url:
             next_url = utils.get_setting('HEALTHVAULT_DEAUTHORIZE_REDIRECT')
         return redirect(next_url)
@@ -113,7 +111,7 @@ def deauthorize(request):
     callback_url = utils.get_callback_url(request)
 
     # Build the deauthorization URL.
-    conn = utils.create_connection(wctoken=hvuser.token)
+    conn = utils.create_connection()
     deauthorization_url = conn.deauthorization_url(callback_url)
 
     # Delete our copy of the user's data.
@@ -185,7 +183,7 @@ def complete(request):
         # Create a connection to retrieve the record_id.
         try:
             conn = utils.create_connection(wctoken=token)
-        except HealthVaultException as e:
+        except hv_exceptions.HealthVaultException:
             logger.exception('Error in creating a HealthVault connection: ')
             return redirect(reverse('healthvault-error'))
 

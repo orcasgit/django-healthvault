@@ -13,11 +13,12 @@ from healthvaultapp.models import HealthVaultUser
 
 class MockHealthVaultConnection(object):
 
-    def __init__(self, record_id=None, auth_url=None, deauth_url=None,
-            **kwargs):
-        self.record_id = record_id
-        self.auth_url = auth_url
-        self.deauth_url = deauth_url
+    def __init__(self, **kwargs):
+        self.record_id = kwargs.pop('record_id', None)
+        self.auth_url = kwargs.pop('auth_url', None)
+        self.deauth_url = kwargs.pop('deauth_url', None)
+        self.sharedsec = kwargs.pop('sharedsec', None)
+        self.auth_token = kwargs.pop('auth_token', None)
 
     def authorization_url(self, callback_url=None, record_id=None):
         return self.auth_url
