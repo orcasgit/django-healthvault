@@ -10,13 +10,15 @@
 #
 # All configuration values have a default; values that are commented out
 # serve to show the default.
-
 import sys, os
 
-# Need project dir on python path so we can find autodoc
-docs_dir = os.path.dirname(__file__)
-project_dir = os.path.join(docs_dir, "..")
-sys.path.append(project_dir)
+import django
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+if django.VERSION < (1, 4):
+    from django.core.management import setup_environ
+    settings = __import__(os.environ["DJANGO_SETTINGS_MODULE"])
+    setup_environ(settings)
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
