@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import redirect, render
 
-from healthvaultlib import exceptions as hv_exceptions
+from healthvaultlib.exceptions import HealthVaultException
 from healthvaultlib.targets import ApplicationTarget
 
 from . import utils
@@ -183,7 +183,7 @@ def complete(request):
         # Create a connection to retrieve the record_id.
         try:
             conn = utils.create_connection(wctoken=token)
-        except hv_exceptions.HealthVaultException:
+        except HealthVaultException:
             logger.exception('Error in creating a HealthVault connection: ')
             return redirect(reverse('healthvault-error'))
 

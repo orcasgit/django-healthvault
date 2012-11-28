@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 
-from healthvaultlib import exceptions as hv_exceptions
+from healthvaultlib.exceptions import HealthVaultException
 from healthvaultlib.healthvault import HealthVaultConn
 
 from . import defaults
@@ -24,7 +24,7 @@ def create_connection(wctoken=None, record_id=None, **kwargs):
 
     HealthVault configuration parameters can be passed in but default to those
     defined in the project settings. The `wctoken` authenticates this
-    connection to retrieve ata for a specific user. If the `record_id` of the
+    connection to retrieve data for a specific user. If the `record_id` of the
     corresponding user is known, it can be passed in to save a network call to
     look up the `record_id`.
 
@@ -74,7 +74,7 @@ def create_connection(wctoken=None, record_id=None, **kwargs):
         msg = 'Public and private keys should be long values: ' \
               '{0}'.format(e.message)
         raise ImproperlyConfigured(msg)
-    except hv_exceptions.HealthVaultException as e:
+    except HealthVaultException as e:
         # We must reset sharedsec and auth_token in the case that the ones we
         # have are expired or invalid and can't be reused.
         sharedsec = None
