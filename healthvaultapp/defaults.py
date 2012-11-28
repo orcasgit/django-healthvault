@@ -2,10 +2,7 @@ from django.conf import settings
 
 
 HEALTHVAULT_APP_ID = None
-"""
-.. warning::
-    You must override this setting in your project's settings.
-
+"""HEALTHVAULT_APP_ID = None
 The UUID of your application, assigned by HealthVault when you create your
 account at the `Application Configuration Center
 <http://msdn.microsoft.com/en-us/healthvault/jj127439>`.
@@ -14,9 +11,6 @@ account at the `Application Configuration Center
 
 HEALTHVAULT_PUBLIC_KEY = None
 """
-.. warning::
-    You must override this setting in your project's settings.
-
 Your application's public key (of type ``long``). In order to communicate with
 HealthVault, you need a signed certificate (it can be self-signed) uploaded to
 HealthVault for your application.
@@ -28,9 +22,6 @@ documentation for information on creating public and private keys.
 
 HEALTHVAULT_PRIVATE_KEY = None
 """
-.. warning::
-    You must override this setting in your project's settings.
-
 Your application's private key (of type ``long``). In order to communicate
 with HealthVault, you need a signed certificate (it can be self-signed)
 uploaded to HealthVault for your application.
@@ -42,9 +33,6 @@ documentation for information on creating public and private keys.
 
 HEALTHVAULT_THUMBPRINT = None
 """
-.. warning::
-    You must override this setting in your project's settings.
-
 Your public key's thumbprint - the Application Configuration Center will
 display this after you upload your public certificate.
 """
@@ -52,9 +40,6 @@ display this after you upload your public certificate.
 
 HEALTHVAULT_SERVER = None
 """
-.. warning::
-    You must override this setting in your project's settings.
-
 The server address at which to reach HealthVault. For example, the
 pre-production server is "platform.healthvault-ppe.com" in the United States
 and "platform.healthvault-ppe.co.uk" in Europe. For production, drop the "ppe".
@@ -63,9 +48,6 @@ and "platform.healthvault-ppe.co.uk" in Europe. For production, drop the "ppe".
 
 HEALTHVAULT_SHELL_SERVER = None
 """
-.. warning::
-    You must override this setting in your project's settings.
-
 The host name of the HealthVault shell server. For example, the pre-production
 shell server is "account.healthvault-ppe.com" in the United States.
 """
@@ -104,5 +86,6 @@ Where to redirect to if user denies us access to their HealthVault account.
 HEALTHVAULT_ERROR_TEMPLATE = 'healthvaultapp/error.html'
 """
 The template to use when an unavoidable error occurs during HealthVault
-integration.
+integration. This is rendered by the :py:func:`error <healthvaultapp.views.error>`
+view.
 """
