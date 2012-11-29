@@ -2,10 +2,10 @@ from django.conf import settings
 
 
 HEALTHVAULT_APP_ID = None
-"""HEALTHVAULT_APP_ID = None
+"""
 The UUID of your application, assigned by HealthVault when you create your
 account at the `Application Configuration Center
-<http://msdn.microsoft.com/en-us/healthvault/jj127439>`.
+<http://msdn.microsoft.com/en-us/healthvault/jj127439>`_.
 """
 
 
@@ -15,7 +15,7 @@ Your application's public key (of type ``long``). In order to communicate with
 HealthVault, you need a signed certificate (it can be self-signed) uploaded to
 HealthVault for your application.
 
-See the `python-healthvault <https://github.com/orcasgit/python-fitbit>`
+See the `python-healthvault <https://github.com/orcasgit/python-fitbit>`_
 documentation for information on creating public and private keys.
 """
 
@@ -26,7 +26,7 @@ Your application's private key (of type ``long``). In order to communicate
 with HealthVault, you need a signed certificate (it can be self-signed)
 uploaded to HealthVault for your application.
 
-See the `python-healthvault <https://github.com/orcasgit/python-fitbit>`
+See the `python-healthvault <https://github.com/orcasgit/python-fitbit>`_
 documentation for information on creating public and private keys.
 """
 

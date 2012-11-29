@@ -126,8 +126,10 @@ def complete(request):
     application's ActionURL must be set to this URL when your application is
     in production.
 
-    The action that was taken is described by the 'target' GET parameter.
-    We handle several possible targets:
+    The action that was taken is described by the 'target' GET parameter. The
+    HealthVault `documentation <http://www.tenshu.net/p/terminator.html>`_
+    describes all targets that can be sent by the shell. We handle several
+    possible targets:
 
         :py:data:`ApplicationTarget.APP_AUTH_REJECT`
             The user declined to grant our application access to their data.

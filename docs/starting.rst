@@ -42,10 +42,10 @@ the user back to your application's Action URL, which is defined at the
 your application's Action URL to use the full path to the
 :py:func:`complete <healthvaultapp.views.complete>` view. (If
 :py:data:`~healthvaultapp.defaults.HEALTHVAULT_IN_DEVELOPMENT` is True, then
-we can direct HealthVault to send callbacks this URL. However, in production
-HealthVault will always send callbacks to the stored Action URL.) Upon
-receiving this confirmation, we complete the authorization process by saving
-the access credentials that HealthVault sent us.
+we can direct HealthVault to send callbacks to this URL. However, in
+production HealthVault will always send callbacks to the stored Action URL.)
+Upon receiving this confirmation, we complete the authorization process by
+saving the access credentials that HealthVault sent us.
 
 Once you have authorization credentials for a user's HealthVault Record, you
 can use these credentials to create a
