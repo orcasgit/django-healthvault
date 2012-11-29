@@ -6,7 +6,12 @@
 Welcome to django-healthvault's documentation!
 ==============================================
 
-Contents:
+django-healthvault is a Django app which helps you integrate your users'
+`HealthVault <http://healthvault.com>`_ data into your site.
+
+Using `python-healthvault <http://github.com/orcasgit/python-healthvault>`_,
+this app handles the details of getting your app authorized to access a user's
+HealthVault data via the HealthVault web API.
 
 .. toctree::
    :maxdepth: 2
@@ -17,13 +22,7 @@ Contents:
    templatetags
    utils
    releases
-   links
-
-django-healthvault is a Django app for integrating a user's HealthVault data
-into your site.
-
-It handles the details of getting your app authorized to access your user's
-HealthVault data via the HealthVault web API.
+   related
 
 Indices and tables
 ==================

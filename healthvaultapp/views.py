@@ -26,19 +26,19 @@ def authorize(request):
     user to a HealthVault URL where they can authorize our application to
     access their HealthVault account data.
 
-    Unless request.GET['keep'] = False, if we have pre-existing access
+    Unless the 'keep' GET parameter is False, if we have pre-existing access
     credentials for the user we request access to the specific record that
     they previously granted us access to.
 
     After the user finishes at the HealthVault site, they will be redirected
-    to the :py:func:`~healthvaultapp.views.complete` view so that we can
-    complete the authorization process & redirect the user to the next page.
-    If request.GET['next'] is provided, it is saved in the 'healthvault_next'
-    session key so the :py:func:`~healthvaultapp.views.complete` view can
-    redirect the user to that URL after successful authorization.
+    to the :py:func:`complete <healthvaultapp.views.complete>` view so that we
+    can complete the authorization process & redirect the user to the next
+    page. If 'next' GET parameter is provided, it is saved in the
+    'healthvault_next' session key so the :py:func:`complete
+    <healthvaultapp.views.complete>` view can redirect the user to that URL
+    after successful authorization.
 
-    URL name:
-        `healthvault-authorize`
+    :URL name: `healthvault-authorize`
     """
     # Store redirect URL in the session for after authorization completion.
     next_url = request.GET.get(NEXT_GET_PARAM, None)
@@ -78,19 +78,18 @@ def deauthorize(request):
     on the user's behalf.
 
     After the deauthorization is complete, HealthVault will redirect to the
-    :py:func:`~healthvaultapp.views.complete` view so that we can complete the
-    deauthorization process & redirect the user to the next page. If
-    request.GET['next'] is provided, it is saved in the 'healthvault_next'
-    session key so  the :py:func:`healthvaultapp.views.complete` view can
-    redirect the user to that URL after successful deauthorization.
+    :py:func:`complete <healthvaultapp.views.complete>` view so that we can
+    complete the deauthorization process & redirect the user to the next page.
+    If 'next' GET parameter is provided, it is saved in the 'healthvault_next'
+    session key so  the :py:func:`complete <healthvaultapp.views.complete>`
+    view can redirect the user to that URL after successful deauthorization.
 
     If we don't have HealthVault credentials for this user, we short-circuit
-    and redirect to either the URL defined in request.GET['next'] or the
+    and redirect to either the URL defined in the 'next' GET parameter or the
     :py:data:`~healthvaultapp.defaults.HEALTHVAULT_DEAUTHORIZE_REDIRECT`
     setting.
 
-    URL name:
-        `healthvault-deauthorize`
+    :URL name: `healthvault-deauthorize`
     """
     next_url = request.GET.get(NEXT_GET_PARAM, None)
 
@@ -127,16 +126,18 @@ def complete(request):
     application's ActionURL must be set to this URL when your application is
     in production.
 
-    The action that was taken is described by the request.GET['target'].
-    We handle several possible targets:
+    The action that was taken is described by the 'target' GET parameter. The
+    HealthVault `documentation <http://www.tenshu.net/p/terminator.html>`_
+    describes all targets that can be sent by the shell. We handle several
+    possible targets:
 
-        ApplicationTarget.APP_AUTH_REJECT
+        :py:data:`ApplicationTarget.APP_AUTH_REJECT`
             The user declined to grant our application access to their data.
             We remove their HealthVault credentials and redirect them to the
             URL defined in the :py:data:`~healthvaultapp.defaults.HEALTHVAULT_DENIED_REDIRECT`
             setting.
 
-        ApplicationTarget.APP_AUTH_SUCCESS, ApplicationTarget.SELECTED_RECORD_CHANGED
+        :py:data:`ApplicationTarget.APP_AUTH_SUCCESS`, :py:data:`ApplicationTarget.SELECTED_RECORD_CHANGED`
             The user successfully granted us access to their HealthVault
             record. SELECTEDRECORDCHANGED is the same as APPAUTHSUCCESS,
             except that the user granted us access to a different record than
@@ -146,7 +147,7 @@ def complete(request):
             defined in the :py:data:`~healthvaultapp.defaults.HEALTHVAULT_AUTHORIZE_REDIRECT`
             setting.
 
-        ApplicationTarget.SIGN_OUT
+        :py:data:`ApplicationTarget.SIGN_OUT`
             We no longer have access to the user's HealthVault record. We
             delete their HealthVault credentials, and redirect to the URL
             defined in the 'healthvault_next' session key, or the default URL
@@ -154,10 +155,9 @@ def complete(request):
             setting.
 
     If there is an unavoidable error during the completion process, the user
-    is redirected to the :py:func:`~healthvaultapp.views.error` view.
+    is redirected to the :py:func:`error <healthvaultapp.views.error>` view.
 
-    URL name:
-        `healthvault-complete`
+    :URL name: `healthvault-complete`
     """
     logger = logging.getLogger('healthvaultapp.views.complete')
     target = request.GET.get('target', None)
@@ -232,11 +232,11 @@ def complete(request):
 def error(request, extra_context=None):
     """
     The user is redirected to this view if we encounter an error during
-    :py:func:`~healthvaultapp.views.complete`. It removes NEXT_SESSION_KEY from
-    the session if it exists, and renders the template defined in the
-    :py:data:`~healthvaultapp.defaults.HEALTHVAULT_ERROR_TEMPLATE` setting.
-    The default template, located at *healthvaultapp/error.html*, simply
-    informs the user of the error::
+    :py:func:`complete <healthvaultapp.views.complete>`. It removes
+    'healthvault_next' from the session if it exists, and renders the template
+    defined in the :py:data:`~healthvaultapp.defaults.HEALTHVAULT_ERROR_TEMPLATE`
+    setting. The default template, located at *healthvaultapp/error.html*,
+    simply informs the user of the error::
 
         <html>
             <head>
@@ -252,8 +252,7 @@ def error(request, extra_context=None):
 
     You may optionally provide extra context when rendering this view.
 
-    URL name:
-        `healthvault-error`
+    :URL name: `healthvault-error`
     """
     request.session.pop(NEXT_SESSION_KEY, None)
     return render(request, utils.get_setting('HEALTHVAULT_ERROR_TEMPLATE'),
