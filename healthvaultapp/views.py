@@ -127,7 +127,7 @@ def complete(request):
     in production.
 
     The action that was taken is described by the 'target' GET parameter. The
-    HealthVault `documentation <http://www.tenshu.net/p/terminator.html>`_
+    HealthVault `documentation <http://msdn.microsoft.com/en-us/library/ff803620.aspx#returnApplicationTargets>`_
     describes all targets that can be sent by the shell. We handle several
     possible targets:
 
