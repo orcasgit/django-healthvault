@@ -29,7 +29,7 @@
 */
 
 body {
-	background: #E9E9E9 url(../img/body-bg.png) repeat 0 0;
+	background: #E9E9E9;
 	font: 13px/1.7em 'Open Sans';
 }
     
@@ -92,9 +92,9 @@ textarea {
 .navbar-inner {
 	padding: 7px 0;
 	
-	background: #292929;
+	background: #008FC5;
 	
-	border-bottom: 1px solid #121212;	
+	border-bottom: 1px solid #047DA3;	
 	
 	-moz-border-radius: 0;
 	-webkit-border-radius: 0;
@@ -418,19 +418,17 @@ textarea {
 	.widget-header h3 {
 		
 		position: relative;
-		top: 2px;
+		top: 4px;
 		left: 10px;
 		
 		display: inline-block;
 		margin-right: 3em;
 		
-		font-size: 14px;
+		font-size: 24px;
 		font-weight: 800;
 		color: #555;
 		line-height: 18px;
-		
-		text-shadow: 1px 1px 2px rgba(255,255,255,.5);
-	}
+			}
 	
 		.widget-header [class^="icon-"], .widget-header [class*=" icon-"] {
 			
@@ -450,7 +448,7 @@ textarea {
 
 
 .widget-content {
-	padding: 20px 15px 15px;
+	padding: 10px 15px 0px;
 	
 	background: #FFF;
 	

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Django Healthvault - ORCAS</title>
+    <title>Django HealthVault - ORCAS</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">    
@@ -15,6 +15,7 @@
     
     <link href="./css/base-admin.css" rel="stylesheet">
     <link href="./css/base-admin-responsive.css" rel="stylesheet">
+    <link href="./css/pages/reports.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -38,7 +39,7 @@
 			</a>
 			
 			<a class="brand" href="./">
-				Django Healthvault - ORCAS				
+				Django HealthVault - ORCAS				
 			</a>		
 			
 			<div class="nav-collapse">
@@ -64,103 +65,300 @@
 		
 			<div class="row">
 
-				<div class="span12"><h1>My Health</h1><div style="height:20px"></div></div>
+				<div class="span12"><h1>Username Lastname <small>State, Country</small></h1>
+								<div style="height:20px"></div></div>
+
+				<div class="span12">
+	      		
+	      		<div class="widget big-stats-container">
+	      			
+	      			<div class="widget-content">
+	      				
+			      		<div id="big_stats" class="cf">
+							<div class="stat">								
+								<h4>Height</h4>
+								<h1><span class="value">6</span><small> ft</small><span class="value">1</span><small> in</small></h1>								
+							</div> <!-- .stat -->
+							
+							<div class="stat">								
+								<h4>Weight</h4>
+								<h1><span class="value">165</span><small style="padding-bottom:-20px;"> lbs</small></h1>								
+							</div> <!-- .stat -->
+							
+							<div class="stat">								
+								<h4>Activity</h4>
+								<h1><span class="value">19</span><small style="padding-bottom:-20px;">miles</small></h1>								
+							</div> <!-- .stat -->
+							
+							<div class="stat">								
+								<h4>Blood Pressure</h4>
+								<span class="value">120/80</span>								
+							</div> <!-- .stat -->
+						</div>
+					
+					</div> <!-- /widget-content -->
+					
+				</div> <!-- /widget -->
+	      		
+	      	</div> <!-- /span12 -->	
+
+			</div> <!-- /row -->
+
+				<div class="row">
+	      	
+	      		<div class="span6">
+	      		
+	      			<div class="widget widget-table">
+						
+						<div class="widget-header">
+							<h3>Activity</h3>
+						</div> <!-- .widget-header -->
+						
+						<div class="widget-content">
+							<table class="table table-bordered table-striped">
+								
+								<thead><tr>								
+									<th>Date</th>
+									<th>Title</th>
+									<th>Activity</th>
+									<th>Distance</th>
+									<th>Duration</th>
+								</tr></thead>
+						
+							<tbody><tr>
+								<td>12-02-12</td>
+								<td>Rexius Trail Hike</td>
+								<td>Hiking</td>
+								<td>2 miles</td>
+								<td>00:40:00</td>
+							</tr>
+							<tr>
+								<td>12-03-12</td>
+								<td>Walking</td>
+								<td>Walking</td>
+								<td>3 miles</td>
+								<td>00:50:00</td>
+							</tr>
+							<tr>
+								<td>12-04-12</td>
+								<td>Walking</td>
+								<td>Walking</td>
+								<td>1 miles</td>
+								<td>00:20:00</td>
+							</tr>
+							<tr>
+								<td>12-05-12</td>
+								<td>Bikeride in Eugene</td>
+								<td>Cycling</td>
+								<td>5 miles</td>
+								<td>00:30:00</td>
+							</tr>
+							<tr>
+								<td>12-06-12</td>
+								<td>Spencer Butte Hike</td>
+								<td>Hiking</td>
+								<td>4 miles</td>
+								<td>01:30:00</td>
+							</tr>
+							<tr>
+								<td>12-07-12</td>
+								<td>Walking</td>
+								<td>Hiking</td>
+								<td>2 miles</td>
+								<td>00:30:00</td>
+							</tr>
+							<tr>
+								<td>12-08-12</td>
+								<td>Walking</td>
+								<td>Walking</td>
+								<td>1 miles</td>
+								<td>00:20:00</td>
+							</tr>
+							
+							
+						</tbody></table>
+							
+						</div> <!-- .widget-content -->
+						
+					</div> <!-- /widget -->	
+	      			
+	  			</div> <!-- /span4 -->
+	  			
+	  			
+	  			
+	  			<div class="span6">
+	  				
+	  				<div class="widget widget-table">
+						
+						<div class="widget-header">
+							<h3>Blood Pressure</h3>
+						</div> <!-- .widget-header -->
+						
+						<div class="widget-content">
+							<table class="table table-bordered table-striped">
+								
+								<thead><tr>	
+									<th>Date</th>							
+									<th>Systolic</th>
+									<th>Diastolic</th>
+									<th>Pulse</th>								
+								</tr></thead>
+						
+							<tbody><tr>
+								<td class="description"><a href="javascript:;">12-01-12</a></td>
+								<td class="value"><span>121</span></td>
+								<td class="value"><span>83</span></td>
+								<td class="value"><span>79</span></td>
+							</tr>
+							<tbody><tr>
+								<td class="description"><a href="javascript:;">12-02-12</a></td>
+								<td class="value"><span>123</span></td>
+								<td class="value"><span>82</span></td>
+								<td class="value"><span>74</span></td>
+							</tr>
+							<tbody><tr>
+								<td class="description"><a href="javascript:;">12-03-12</a></td>
+								<td class="value"><span>133</span></td>
+								<td class="value"><span>85</span></td>
+								<td class="value"><span>70</span></td>
+							</tr>
+							<tbody><tr>
+								<td class="description"><a href="javascript:;">12-04-12</a></td>
+								<td class="value"><span>140</span></td>
+								<td class="value"><span>90</span></td>
+								<td class="value"><span>85</span></td>
+							</tr>
+							<tbody><tr>
+								<td class="description"><a href="javascript:;">12-05-12</a></td>
+								<td class="value"><span>1210</span></td>
+								<td class="value"><span>83</span></td>
+								<td class="value"><span>74</span></td>
+							</tr>
+							<tbody><tr>
+								<td class="description"><a href="javascript:;">12-06-12</a></td>
+								<td class="value"><span>121</span></td>
+								<td class="value"><span>86</span></td>
+								<td class="value"><span>78</span></td>
+							</tr>
+							<tbody><tr>
+								<td class="description"><a href="javascript:;">12-07-12</a></td>
+								<td class="value"><span>125</span></td>
+								<td class="value"><span>82</span></td>
+								<td class="value"><span>70</span></td>
+							</tr>
+							
+							
+						</tbody></table>
+							
+						</div> <!-- .widget-content -->
+						
+					</div>
+	  				
+	  			</div> <!-- /span4 -->
+	  			
+	  			
+	  			
+	  			<div class="span12">
+	  				
+	  				<div class="widget widget-table">
+						
+						<div class="widget-header">
+							<h3>Sleep</h3>
+						</div> <!-- .widget-header -->
+						
+						<div class="widget-content">
+							<table class="table table-bordered table-striped">
+								
+								<thead><tr>								
+									<th>Date</th>
+									<th>To Bed</th>
+									<th>Woke Up</th>
+									<th>Time Asleep</th>
+									<th>Settling Time</th>
+									<th>Awake Time</th>
+									<th>Medication</th>							
+								</tr></thead>
+						
+							<tbody><tr>
+								<td>12-01-12</td>
+								<td>8:00pm</td>
+								<td>6:00am</td>
+								<td>09:40:00</td>
+								<td>00:20:00</td>
+								<td>00:20:00</td>
+								<td>Lunesta</td>
+							</tr>
+							<tr>
+								<td>12-01-12</td>
+								<td>8:00pm</td>
+								<td>6:00am</td>
+								<td>09:40:00</td>
+								<td>00:20:00</td>
+								<td>00:20:00</td>
+								<td>Lunesta</td>
+							</tr>
+							<tr>
+								<td>12-01-12</td>
+								<td>8:00pm</td>
+								<td>6:00am</td>
+								<td>09:40:00</td>
+								<td>00:20:00</td>
+								<td>00:20:00</td>
+								<td>Lunesta</td>
+							</tr>
+							<tr>
+								<td>12-01-12</td>
+								<td>8:00pm</td>
+								<td>6:00am</td>
+								<td>09:40:00</td>
+								<td>00:20:00</td>
+								<td>00:20:00</td>
+								<td>Lunesta</td>
+							</tr>
+							<tr>
+								<td>12-01-12</td>
+								<td>8:00pm</td>
+								<td>6:00am</td>
+								<td>09:40:00</td>
+								<td>00:20:00</td>
+								<td>00:20:00</td>
+								<td>Lunesta</td>
+							</tr>
+							<tr>
+								<td>12-01-12</td>
+								<td>8:00pm</td>
+								<td>6:00am</td>
+								<td>09:40:00</td>
+								<td>00:20:00</td>
+								<td>00:20:00</td>
+								<td>Lunesta</td>
+							</tr>
+							<tr>
+								<td>12-01-12</td>
+								<td>8:00pm</td>
+								<td>6:00am</td>
+								<td>09:40:00</td>
+								<td>00:20:00</td>
+								<td>00:20:00</td>
+								<td>Lunesta</td>
+							</tr>
+							
+							
+						</tbody></table>
+							
+						</div> <!-- .widget-content -->
+						
+					</div>
+	  				
+	  			</div> <!-- /span4 -->
+	      					<div class="span12"><a href="">Unlink from your HealthVault record (Username)</a><div style="height:200px"></div></div>
+
+			</div> <!-- /row -->
 
 			
-				<div class="span6">
-				
-					<div class="widget">
-						
-						<div class="widget-header">
-							<i class="icon-bar-chart"></i>
-							<h3>Bar Chart</h3>
-						</div> <!-- /widget-header -->
-						
-						<div class="widget-content">
-						
-							<div id="bar-chart" class="chart-holder"></div> <!-- /bar-chart -->
-						
-						</div> <!-- /widget-content -->
-					
-					</div> <!-- /widget -->		
-					
-					
-				
-					<div class="widget">
-						
-						<div class="widget-header">
-							<i class="icon-bar-chart"></i>
-							<h3>Area Chart</h3>
-						</div> <!-- /widget-header -->
-						
-						<div class="widget-content">
-						
-							<div id="area-chart" class="chart-holder"></div> <!-- /area-chart -->
-						
-						</div> <!-- /widget-content -->
-					
-					</div> <!-- /widget -->	
-					
-					
-					
-				
-					<div class="widget">
-						
-						<div class="widget-header">
-							<i class="icon-bar-chart"></i>
-							<h3>Pie Chart</h3>
-						</div> <!-- /widget-header -->
-						
-						<div class="widget-content">
-						
-							<div id="pie-chart" class="chart-holder"></div> <!-- /pie-chart -->
-						
-						</div> <!-- /widget-content -->
-					
-					</div> <!-- /widget -->			
-				
-				</div> <!-- /span6 -->
-				
-				
 			
-				<div class="span6">
-				
-					<div class="widget">
-						
-						<div class="widget-header">
-							<i class="icon-bar-chart"></i>
-							<h3>Donut Chart</h3>
-						</div> <!-- /widget-header -->
-						
-						<div class="widget-content">
-						
-							<div id="donut-chart" class="chart-holder"></div> <!-- /bar-chart -->
-						
-						</div> <!-- /widget-content -->
-					
-					</div> <!-- /widget -->	
-					
-					
-				
-					<div class="widget">
-						
-						<div class="widget-header">
-							<i class="icon-bar-chart"></i>
-							<h3>Line Chart</h3>
-						</div> <!-- /widget-header -->
-						
-						<div class="widget-content">
-						
-							<div id="line-chart" class="chart-holder"></div> <!-- /line-chart -->
-						
-						</div> <!-- /widget-content -->
-					
-					</div> <!-- /widget -->				
-				
-				</div> <!-- /span6 -->
-			
-			
-			</div> <!-- /row -->
+
+
 		
 		
 		</div> <!-- /container -->
@@ -181,7 +379,7 @@
 			<div class="row">
 				
     			<div class="span12">
-    				&copy; 2012 <a href="http://bootstrapadmin.com">Django Healthvault - ORCAS</a>
+    				&copy; 2012 <a href="http://bootstrapadmin.com">Django HealthVault - ORCAS</a>
     			</div> <!-- /span12 -->
     			
     		</div> <!-- /row -->
@@ -193,25 +391,6 @@
 </div> <!-- /footer -->
     
 
-<!-- Le javascript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="./js/jquery-1.7.2.min.js"></script>
-<script src="./js/excanvas.min.js"></script>
-<script src="./js/jquery.flot.js"></script>
-<script src="./js/jquery.flot.pie.js"></script>
-<script src="./js/jquery.flot.orderBars.js"></script>
-<script src="./js/jquery.flot.resize.js"></script>
-
-
-<script src="./js/bootstrap.js"></script>
-<script src="./js/base.js"></script>
-
-<script src="./js/charts/bar.js"></script>
-<script src="./js/charts/donut.js"></script>
-<script src="./js/charts/line.js"></script>
-<script src="./js/charts/pie.js"></script>
-<script src="./js/charts/area.js"></script>
 
   </body>
 </html>
