@@ -11,10 +11,10 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=['distribute'] + required,
-    url='https://github.com/caktus/django-healthvault/',
+    url='https://github.com/orcasgit/django-healthvault/',
     license='',
     description=u' '.join(__import__('healthvaultapp').__doc__.splitlines()).strip(),
-    long_description=open('README.rst').read(),
+    long_description=open('README.md').read(),
     classifiers=[
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Intended Audience :: Developers',
