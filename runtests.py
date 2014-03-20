@@ -46,6 +46,12 @@ def runtests():
     sys.exit(test_runner.run_tests(tests))
 
 
+import django
+# In Django 1.7, we need to run setup first
+if hasattr(django, 'setup'):
+    django.setup()
+
+
 if __name__ == '__main__':
     runtests()
 
