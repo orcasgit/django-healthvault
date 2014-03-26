@@ -1,6 +1,6 @@
 healthvaultapp
 ==============
-[![Requirements Status](https://requires.io/github/orcasgit/django-healthvault/requirements.png?branch=master)](https://requires.io/github/orcasgit/django-healthvault/requirements/?branch=master)
+[![Build Status](https://travis-ci.org/orcasgit/django-healthvault.svg?branch=master)](https://travis-ci.org/orcasgit/django-healthvault) [![Requirements Status](https://requires.io/github/orcasgit/django-healthvault/requirements.png?branch=master)](https://requires.io/github/orcasgit/django-healthvault/requirements/?branch=master)
 
 django-healthvault is a Django app which integrates data stored on HealthVault
 into your site. It handles the details of getting your site authorized to
