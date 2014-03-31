@@ -71,9 +71,9 @@ def create_connection(wctoken=None, record_id=None, **kwargs):
         conn = HealthVaultConn(wctoken=wctoken, record_id=record_id, **config)
     except ValueError as e:
         logger.error(e)
-        msg = 'Public and private keys should be long values: ' \
-              '{0}'.format(e.message)
-        raise ImproperlyConfigured(msg)
+        msg = e.args[0] if e.args else None
+        raise ImproperlyConfigured(
+            'Public and private keys should be long values: {0}'.format(msg))
     except HealthVaultException as e:
         # We must reset sharedsec and auth_token in the case that the ones we
         # have are expired or invalid and can't be reused.
