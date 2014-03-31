@@ -2,4 +2,4 @@
 
 # Set Django to the latest stable release, requests.io will notify of new releases
 django==1.6.2
-tox==1.7.0
+tox==1.7.1
