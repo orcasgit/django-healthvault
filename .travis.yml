@@ -8,5 +8,6 @@ env:
   - TOX_ENV=py26-1.6.X
   - TOX_ENV=py26-1.5.X
   - TOX_ENV=py26-1.4.X
-install: pip install tox
-script: tox -e $TOX_ENV
+install: pip install coveralls tox
+script: tox -e $TOX_ENV -- --coverage 2
+after_success: coveralls

@@ -1,0 +1,2 @@
+[run]
+omit = healthvaultapp/tests*,runtests.py,*/site-packages/*,*/python?.?/*,*/pypy/*,.tox/*
