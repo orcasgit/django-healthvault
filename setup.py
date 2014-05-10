@@ -10,7 +10,7 @@ setup(
     author_email='',
     packages=find_packages(),
     include_package_data=True,
-    install_requires=['distribute'] + required,
+    install_requires=['setuptools'] + required,
     url='https://github.com/orcasgit/django-healthvault/',
     license='',
     description=u' '.join(__import__('healthvaultapp').__doc__.splitlines()).strip(),
