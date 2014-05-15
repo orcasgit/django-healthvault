@@ -1,5 +1,5 @@
 -r test.txt
 
 # Set packages to the latest stable release, requests.io will notify of new releases
-django==1.6.4
+django==1.6.5
 tox==1.7.1
