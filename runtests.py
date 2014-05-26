@@ -45,7 +45,7 @@ def runtests():
                       " 2=with branches")
     options, tests = parser.parse_args()
     tests = tests or ['healthvaultapp']
-    
+
     covlevel = int(options.coverage)
     if covlevel:
         current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -56,6 +56,7 @@ def runtests():
         cov = coverage.coverage(branch=branch, config_file='.coveragerc')
         cov.load()
         cov.start()
+        cov.html_report()
 
     TestRunner = get_runner(settings)
     test_runner = TestRunner(verbosity=1, interactive=True, failfast=False)
@@ -64,7 +65,7 @@ def runtests():
     if covlevel:
         cov.stop()
         cov.save()
-    
+
     sys.exit(exit_val)
 
 
@@ -76,4 +77,3 @@ if hasattr(django, 'setup'):
 
 if __name__ == '__main__':
     runtests()
-
