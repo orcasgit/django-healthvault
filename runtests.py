@@ -56,7 +56,6 @@ def runtests():
         cov = coverage.coverage(branch=branch, config_file='.coveragerc')
         cov.load()
         cov.start()
-        cov.html_report()
 
     TestRunner = get_runner(settings)
     test_runner = TestRunner(verbosity=1, interactive=True, failfast=False)
@@ -65,6 +64,7 @@ def runtests():
     if covlevel:
         cov.stop()
         cov.save()
+        cov.html_report()
 
     sys.exit(exit_val)
 
