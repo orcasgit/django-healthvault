@@ -13,3 +13,4 @@ docs/_build/*
 dist/*
 example_project/
 htmlcov
+env
