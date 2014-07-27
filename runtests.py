@@ -32,6 +32,11 @@ if not settings.configured:
         HEALTHVAULT_PRIVATE_KEY=12345678L,
         HEALTHVAULT_SERVER='test_server',
         HEALTHVAULT_SHELL_SERVER='test_shell_server',
+
+        MIDDLEWARE_CLASSES = (
+            'django.contrib.sessions.middleware.SessionMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
+        )
     )
 
 
